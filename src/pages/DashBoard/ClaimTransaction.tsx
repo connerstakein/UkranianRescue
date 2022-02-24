@@ -1,16 +1,16 @@
 import { LoadingOutlined } from '@ant-design/icons'
-import { useQuery } from '@apollo/react-hooks'
+import { Contract } from '@ethersproject/contracts'
 import { Web3Provider } from '@ethersproject/providers'
 import { useWeb3React } from '@web3-react/core'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { HttpLink } from 'apollo-link-http'
-import gql from 'graphql-tag'
+import { Spin } from 'antd'
+import { RedCard } from 'components/Card'
 //import { RowBetween } from 'components/Row'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 //import useAddTokenToMetamask from 'hooks/useAddTokenToMetamask' - /////from transaction cofrimation modal index line 127
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components/macro'
+
+import header from '../../assets/images/header.png'
 const ClaimButton = styled.button`
   position: relative;
   display: 'block';
@@ -60,7 +60,7 @@ const DonateButton = styled.button`
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />
 
 const ClaimTransaction = () => {
-  const [Bigloading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { account } = useActiveWeb3React()
   const showConnectAWallet = Boolean(!account)
   const context = useWeb3React()
@@ -69,58 +69,89 @@ const ClaimTransaction = () => {
   const signer = provider.getSigner()
   //const { addToken, success } = useAddTokenToMetamask(currencyToAdd)
 
-  const DAI_QUERY = gql`
-    query tokens($tokenAddress: Bytes!) {
-      tokens(where: { id: $tokenAddress }) {
-        derivedETH
-        totalLiquidity
-      }
+  const handleDonate = useCallback(async () => {
+    if (showConnectAWallet) {
+      console.log({ message: 'Hold On there Partner, there seems to be an Account err!' })
+      return
     }
-  `
 
-  const ETH_PRICE_QUERY = gql`
-    query ethPrice {
-      bundle(id: "1") {
-        ethPrice
-      }
+    try {
+      setLoading(true)
+      const response = await fetch(
+        'https://api.etherscan.io/api?module=contract&action=getabi&address=0x83e9f223e1edb3486f876ee888d76bfba26c475a&apikey=432BW4Y2JX817J6CJAWGHAFTXQNFVXRU2Q'
+      ) //ClientTokenABIneeded
+      const data = await response.json()
+      const abi = data.result
+      console.log(abi)
+      const contractaddress = '0x83e9f223e1edb3486f876ee888d76bfba26c475a' // "clienttokenaddress"
+      const contract = new Contract(contractaddress, abi, signer)
+      const DonateBalance = await contract.approve(account, 1) //.claim(account,amount)
+      const Donatetxid = await DonateBalance
+      return Donatetxid
+      /////
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    } finally {
+      setLoading(false)
     }
-  `
-  const { loading: ethLoading, data: ethPriceData } = useQuery(ETH_PRICE_QUERY)
-  const { loading: daiLoading, data: daiData } = useQuery(DAI_QUERY, {
-    variables: {
-      tokenAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
-    },
-  })
-  const daiPriceInEth = daiData && daiData.tokens[0].derivedETH
-  const daiTotalLiquidity = daiData && daiData.tokens[0].totalLiquidity
-  const ethPriceInUSD = ethPriceData && ethPriceData.bundles[0].ethPrice
-  useEffect(() => {
-    const client = new ApolloClient({
-      link: new HttpLink({
-        uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-      }),
-      cache: new InMemoryCache(),
-    })
-  })
+  }, [showConnectAWallet, account, signer])
+
+  const handleClaim = useCallback(async () => {
+    if (showConnectAWallet) {
+      console.log({ message: 'Hold On there Partner, there seems to be an Account err!' })
+      return
+    }
+
+    try {
+      setLoading(true)
+      const response = await fetch(
+        'https://api.etherscan.io/api?module=contract&action=getabi&address=0x83e9f223e1edb3486f876ee888d76bfba26c475a&apikey=432BW4Y2JX817J6CJAWGHAFTXQNFVXRU2Q'
+      ) //ClientTokenABIneeded
+      const data = await response.json()
+      const abi = data.result
+      console.log(abi)
+      const contractaddress = '0x83e9f223e1edb3486f876ee888d76bfba26c475a' // "clienttokenaddress"
+      const contract = new Contract(contractaddress, abi, signer)
+      const ClaimBalance = await contract.approve(account, 1) //.claim(account,amount)
+      const Claimtxid = await ClaimBalance
+
+      return Claimtxid
+      /////
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    } finally {
+      setLoading(false)
+    }
+  }, [showConnectAWallet, account, signer])
+
   return (
     <>
-      <div>
-        <div>
-          Dai price:{' '}
-          {ethLoading || daiLoading
-            ? 'Loading token data...'
-            : '$' +
-              // parse responses as floats and fix to 2 decimals
-              (parseFloat(daiPriceInEth) * parseFloat(ethPriceInUSD)).toFixed(2)}
-        </div>
-        <div>
-          Dai total liquidity:{' '}
-          {daiLoading
-            ? 'Loading token data...'
-            : // display the total amount of DAI spread across all pools
-              parseFloat(daiTotalLiquidity).toFixed(0)}
-        </div>
-      </div>
+      <RedCard
+        style={{
+          backgroundColor: '#f70000',
+          fontSize: '12x',
+          maxWidth: '800px',
+          maxHeight: 200,
+          marginBottom: '10px',
+        }}
+      >
+        <StyledImg
+          style={{ paddingBottom: 10, alignItems: 'left' }}
+          src={header}
+          height={200}
+          width={400}
+          alt="eader"
+        ></StyledImg>
+
+        <DonateButton style={{ display: 'block' }} onClick={handleDonate}>
+          Donate to Charity
+        </DonateButton>
+        <ClaimButton color="secondary" disabled={!account || loading} onClick={handleClaim}>
+          {loading ? <Spin indicator={antIcon} className="add-spinner" /> : 'Claim'}
+        </ClaimButton>
+      </RedCard>
     </>
   )
 }

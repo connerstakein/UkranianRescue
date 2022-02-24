@@ -7,7 +7,8 @@ import styled, {
   ThemeProvider as StyledComponentsThemeProvider,
 } from 'styled-components/macro'
 
-import JpegBackground2 from '../assets/images/JpegBackground2.png'
+//import download from '../assets/images/download.jpg'
+import mcdegenbackground from '../assets/images/mcdegenbackground.jpg'
 import { useIsDarkMode } from '../state/user/hooks'
 import { Colors } from './styled'
 
@@ -213,7 +214,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
 html {
   
  
- background-image: ${`url(${JpegBackground2})`};
+ background-image: ${`url(${mcdegenbackground})`};
  color: ${({ theme }) => theme.text1};
  
 
