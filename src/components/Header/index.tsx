@@ -1,10 +1,14 @@
+/* eslint-disable simple-import-sort/imports */
+import { PieChartOutlined } from '@ant-design/icons'
 import { Trans } from '@lingui/macro'
 import useScrollPosition from '@react-hook/window-scroll'
+import { Button, Menu } from 'antd'
 import { CHAIN_INFO } from 'constants/chainInfo'
 import { SupportedChainId } from 'constants/chains'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 //import useTheme from 'hooks/useTheme'
 import { darken } from 'polished'
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useShowClaimPopup, useToggleSelfClaimModal } from 'state/application/hooks'
 import { useUserHasAvailableClaim } from 'state/claim/hooks'
@@ -15,15 +19,12 @@ import styled from 'styled-components/macro'
 
 import mcdegenlogo from '../../assets/images/mcdegenlogo.png'
 //import { ReactComponent as Logo } from '../../assets/svg/logo.svg'
-import { ExternalLink, ThemedText } from '../../theme'
-import ClaimModal from '../claim/ClaimModal'
-import { CardNoise } from '../earn/styled'
+import { ExternalLink } from '../../theme'
 //import Menu from '../Menu' - this is the menu that includes uniswaps docs etc.
 import Row from '../Row'
-import { Dots } from '../swap/styleds'
 import Web3Status from '../Web3Status'
-import HolidayOrnament from './HolidayOrnament'
 import NetworkSelector from './NetworkSelector'
+import { Link } from 'react-scroll'
 
 const HeaderFrame = styled.div<{ showBackground: boolean }>`
   display: grid;
@@ -245,7 +246,8 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 
 export default function Header() {
   const { account, chainId } = useActiveWeb3React()
-
+  const { SubMenu } = Menu
+  const [collapse, setcollapse] = useState(Boolean)
   const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
   // const [darkMode] = useDarkModeManager()
   // const { white, black } = useTheme()
@@ -266,78 +268,57 @@ export default function Header() {
       nativeCurrency: { symbol: nativeCurrencySymbol },
     },
   } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
-
+  //{React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
   return (
-    <HeaderFrame showBackground={scrollY > 45}>
-      <ClaimModal />
-      <Title href=".">
+    <>
+      <div style={{ width: 256, backgroundColor: '#000000' }}>
+        <Button type="primary" onClick={() => setcollapse(true)} style={{ marginBottom: 16 }}></Button>
+        <Menu
+          defaultSelectedKeys={['1']}
+          defaultOpenKeys={['sub1']}
+          mode="inline"
+          theme="dark"
+          inlineCollapsed={collapse}
+        >
+          <Menu.Item key="1" icon={<PieChartOutlined />}>
+            {' '}
+            <Link activeClass="active" to="home" spy={true} smooth={true}>
+              Home
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="1" icon={<PieChartOutlined />}>
+            {' '}
+            <Link to="about" spy={true} smooth={true}>
+              Bottom
+            </Link>
+          </Menu.Item>
+        </Menu>
+      </div>
+      <HeaderFrame showBackground={scrollY > 1005}>
         <UniIcon>
           <Logo src={mcdegenlogo} alt="logo" width="50px" height="100%"></Logo>
-          <HolidayOrnament />
         </UniIcon>
-      </Title>
-      <HeaderLinks>
-        <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
-          <Trans>Swap</Trans>
-        </StyledNavLink>
-        <StyledNavLink
-          id={`pool-nav-link`}
-          to={'/pool'}
-          isActive={(match, { pathname }) =>
-            Boolean(match) ||
-            pathname.startsWith('/add') ||
-            pathname.startsWith('/remove') ||
-            pathname.startsWith('/increase') ||
-            pathname.startsWith('/find')
-          }
-        >
-          <Trans>Pool</Trans>
-        </StyledNavLink>
-        {(!chainId || chainId === SupportedChainId.MAINNET) && (
-          <StyledNavLink id={`vote-nav-link`} to={'/vote'}>
-            <Trans>DashBoard</Trans>
-          </StyledNavLink>
-        )}
-        <StyledExternalLink id={`charts-nav-link`} href={mcdegenurl}>
-          <Trans>Website</Trans>
-          <sup>↗</sup>
-        </StyledExternalLink>
-      </HeaderLinks>
+        <HeaderLinks></HeaderLinks>
 
-      <HeaderControls>
-        <HeaderElement>
-          <NetworkSelector />
-        </HeaderElement>
-        <HeaderElement>
-          {availableClaim && !showClaimPopup && (
-            <UNIWrapper onClick={toggleClaimModal}>
-              <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
-                <ThemedText.White padding="0 2px">
-                  {claimTxn && !claimTxn?.receipt ? (
-                    <Dots>
-                      <Trans>Claiming UNI</Trans>
-                    </Dots>
-                  ) : (
-                    <Trans>Claim UNI</Trans>
-                  )}
-                </ThemedText.White>
-              </UNIAmount>
-              <CardNoise />
-            </UNIWrapper>
-          )}
-          <AccountElement active={!!account}>
-            {account && userEthBalance ? (
-              <BalanceText style={{ flexShrink: 0, userSelect: 'none' }}>
-                <Trans>
-                  {userEthBalance?.toSignificant(3)} {nativeCurrencySymbol}
-                </Trans>
-              </BalanceText>
-            ) : null}
-            <Web3Status />
-          </AccountElement>
-        </HeaderElement>
-        <HeaderElement></HeaderElement>
-      </HeaderControls>
-    </HeaderFrame>
+        <HeaderControls>
+          <HeaderElement>
+            <NetworkSelector />
+          </HeaderElement>
+          <HeaderElement>
+            <AccountElement active={!!account}>
+              {account && userEthBalance ? (
+                <BalanceText style={{ flexShrink: 0, userSelect: 'none' }}>
+                  <Trans>
+                    {userEthBalance?.toSignificant(3)} {nativeCurrencySymbol}
+                  </Trans>
+                </BalanceText>
+              ) : null}
+              <Web3Status />
+            </AccountElement>
+          </HeaderElement>
+          <HeaderElement></HeaderElement>
+        </HeaderControls>
+      </HeaderFrame>
+    </>
   )
 }

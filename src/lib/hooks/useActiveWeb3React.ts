@@ -1,6 +1,7 @@
 import { useAtomValue } from 'jotai/utils'
-import { injectedAtom, urlAtom, Web3ReactState } from 'lib/state/web3'
 import { Web3ReactHooks } from 'widgets-web3-react/core'
+
+import { injectedAtom, urlAtom, Web3ReactState } from '../../lib/state/web3'
 
 export function useActiveWeb3ReactState(): Web3ReactState {
   const injected = useAtomValue(injectedAtom)
