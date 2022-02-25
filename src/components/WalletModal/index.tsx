@@ -19,7 +19,7 @@ import { SUPPORTED_WALLETS } from '../../constants/wallet'
 import usePrevious from '../../hooks/usePrevious'
 import { useModalOpen, useWalletModalToggle } from '../../state/application/hooks'
 import { ApplicationModal } from '../../state/application/reducer'
-import { ExternalLink, ThemedText } from '../../theme'
+import { ThemedText } from '../../theme'
 import { isMobile } from '../../utils/userAgent'
 import AccountDetails from '../AccountDetails'
 import Card, { GreyCard } from '../Card' //LightCard
@@ -392,14 +392,7 @@ export default function WalletModal({
           <AutoColumn gap="16px">
             <GreyCard>
               <AutoRow style={{ flexWrap: 'nowrap' }}>
-                <ThemedText.Black fontSize={14}>
-                  <Trans>
-                    By connecting a wallet, you agree to Mcdegens{' '}
-                    <ExternalLink href="https://uniswap.org/terms-of-service/">Terms of Service</ExternalLink> and
-                    acknowledge that you have read and understand the{' '}
-                    <ExternalLink href="https://uniswap.org/disclaimer/">Protocol Disclaimer</ExternalLink>.
-                  </Trans>
-                </ThemedText.Black>
+                <ThemedText.Black fontSize={14}></ThemedText.Black>
               </AutoRow>
             </GreyCard>
             {walletView === WALLET_VIEWS.PENDING ? (
@@ -416,9 +409,7 @@ export default function WalletModal({
               <RowBetween>
                 <AutoRow gap="4px">
                   <Info size={20} />
-                  <ThemedText.Label fontSize={14}>
-                    <Trans>How this app uses APIs</Trans>
-                  </ThemedText.Label>
+                  <ThemedText.Label fontSize={14}></ThemedText.Label>
                 </AutoRow>
                 <ArrowRight size={16} />
               </RowBetween>

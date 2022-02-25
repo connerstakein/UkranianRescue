@@ -8,7 +8,8 @@ import styled, {
 } from 'styled-components/macro'
 
 //import download from '../assets/images/download.jpg'
-import mcdegenbackground from '../assets/images/mcdegenbackground.jpg'
+//import mcdegenbackground from '../assets/images/mcdegenbackground.jpg'
+import ukrbackground from '../assets/images/ukrbackground.jpg'
 import { useIsDarkMode } from '../state/user/hooks'
 import { Colors } from './styled'
 
@@ -214,8 +215,8 @@ export const ThemedGlobalStyle = createGlobalStyle`
 html {
   
  
- background-image: ${`url(${mcdegenbackground})`};
- color: ${({ theme }) => theme.text1};
+ background-image: ${`url(${ukrbackground})`};
+ color: ${({ theme }) => theme.text2};
  
 
 

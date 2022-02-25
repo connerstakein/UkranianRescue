@@ -11,6 +11,8 @@ export enum SupportedChainId {
   ARBITRUM_ONE = 42161,
   ARBITRUM_RINKEBY = 421611,
 
+  BINANCESMARTCHAIN = 56,
+
   OPTIMISM = 10,
   OPTIMISTIC_KOVAN = 69,
 
@@ -24,6 +26,7 @@ export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.RINKEBY]: 'rinkeby',
   [SupportedChainId.GOERLI]: 'goerli',
   [SupportedChainId.KOVAN]: 'kovan',
+  [SupportedChainId.BINANCESMARTCHAIN]: 'binancesmartchain',
   [SupportedChainId.POLYGON]: 'polygon',
   [SupportedChainId.POLYGON_MUMBAI]: 'polygon_mumbai',
   [SupportedChainId.ARBITRUM_ONE]: 'arbitrum',

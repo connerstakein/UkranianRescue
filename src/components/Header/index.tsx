@@ -1,28 +1,14 @@
+/* eslint-disable simple-import-sort/imports */
 import { Trans } from '@lingui/macro'
 import useScrollPosition from '@react-hook/window-scroll'
 import { CHAIN_INFO } from 'constants/chainInfo'
 import { SupportedChainId } from 'constants/chains'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-//import useTheme from 'hooks/useTheme'
-import { darken } from 'polished'
-import { NavLink } from 'react-router-dom'
-import { useShowClaimPopup, useToggleSelfClaimModal } from 'state/application/hooks'
-import { useUserHasAvailableClaim } from 'state/claim/hooks'
-import { useUserHasSubmittedClaim } from 'state/transactions/hooks'
-//import { useDarkModeManager } from 'state/user/hooks'
 import { useNativeCurrencyBalances } from 'state/wallet/hooks'
 import styled from 'styled-components/macro'
-
-import mcdegenlogo from '../../assets/images/mcdegenlogo.png'
-//import { ReactComponent as Logo } from '../../assets/svg/logo.svg'
-import { ExternalLink, ThemedText } from '../../theme'
-import ClaimModal from '../claim/ClaimModal'
-import { CardNoise } from '../earn/styled'
-//import Menu from '../Menu' - this is the menu that includes uniswaps docs etc.
+import UKRlogo from '../../assets/images/UKRlogo.png'
 import Row from '../Row'
-import { Dots } from '../swap/styleds'
 import Web3Status from '../Web3Status'
-import HolidayOrnament from './HolidayOrnament'
 import NetworkSelector from './NetworkSelector'
 
 const HeaderFrame = styled.div<{ showBackground: boolean }>`
@@ -132,27 +118,6 @@ const AccountElement = styled.div<{ active: boolean }>`
   }
 `
 
-const UNIAmount = styled(AccountElement)`
-  color: white;
-  padding: 4px 8px;
-  height: 36px;
-  font-weight: 500;
-  background-color: ${({ theme }) => theme.bg3};
-  background: radial-gradient(174.47% 188.91% at 1.84% 0%, #ff007a 0%, #2172e5 100%), #edeef2;
-`
-
-const UNIWrapper = styled.span`
-  width: fit-content;
-  position: relative;
-  cursor: pointer;
-  :hover {
-    opacity: 0.8;
-  }
-  :active {
-    opacity: 0.9;
-  }
-`
-
 //const BalanceText = styled(Text)`
 //  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
 //    display: none;
@@ -164,20 +129,6 @@ const BalanceText = styled.text`
   font-size: '18px';
 `
 
-const Title = styled.a`
-  display: flex;
-  align-items: center;
-  pointer-events: auto;
-  justify-self: flex-start;
-  margin-right: 12px;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    justify-self: center;
-  `};
-  :hover {
-    cursor: pointer;
-  }
-`
-
 const UniIcon = styled.div`
   transition: transform 0.3s ease;
   :hover {
@@ -186,79 +137,9 @@ const UniIcon = styled.div`
   position: relative;
 `
 
-const activeClassName = 'ACTIVE'
-
-const StyledNavLink = styled(NavLink).attrs({
-  activeClassName,
-})`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: left;
-  border-radius: 3rem;
-  outline: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: #000000;
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 8px 12px;
-  word-break: break-word;
-  overflow: hidden;
-  white-space: nowrap;
-  &.${activeClassName} {
-    border-radius: 14px;
-    font-weight: 600;
-    justify-content: center;
-    color: #000000;
-    background-color: ${({ theme }) => theme.bg0};
-  }
-  :hover,
-  :focus {
-    color: ${({ theme }) => darken(0.1, theme.text1)};
-  }
-`
-
-const StyledExternalLink = styled(ExternalLink).attrs({
-  activeClassName,
-})<{ isActive?: boolean }>`
-  ${({ theme }) => theme.flexRowNoWrap}
-  align-items: left;
-  border-radius: 3rem;
-  outline: none;
-  cursor: pointer;
-  text-decoration: none;
-  color: #000000;
-  font-size: 1rem;
-  width: fit-content;
-  margin: 0 12px;
-  font-weight: 500;
-  &.${activeClassName} {
-    border-radius: 14px;
-    font-weight: 600;
-    color: #000000;
-  }
-  :hover,
-  :focus {
-    color: ${({ theme }) => darken(0.1, theme.text1)};
-    text-decoration: none;
-  }
-`
-
 export default function Header() {
   const { account, chainId } = useActiveWeb3React()
-
   const userEthBalance = useNativeCurrencyBalances(account ? [account] : [])?.[account ?? '']
-  // const [darkMode] = useDarkModeManager()
-  // const { white, black } = useTheme()
-
-  const toggleClaimModal = useToggleSelfClaimModal()
-  const mcdegenurl = 'https://mcdegens.com'
-
-  const availableClaim: boolean = useUserHasAvailableClaim(account)
-
-  const { claimTxn } = useUserHasSubmittedClaim(account ?? undefined)
-
-  const showClaimPopup = useShowClaimPopup()
-
   const scrollY = useScrollPosition()
 
   const {
@@ -266,78 +147,34 @@ export default function Header() {
       nativeCurrency: { symbol: nativeCurrencySymbol },
     },
   } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
-
+  //{React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
   return (
-    <HeaderFrame showBackground={scrollY > 45}>
-      <ClaimModal />
-      <Title href=".">
+    <>
+      <HeaderFrame showBackground={scrollY > 1005}>
         <UniIcon>
-          <Logo src={mcdegenlogo} alt="logo" width="50px" height="100%"></Logo>
-          <HolidayOrnament />
+          <Logo src={UKRlogo} alt="logo" width="50px" height="100%"></Logo>
         </UniIcon>
-      </Title>
-      <HeaderLinks>
-        <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
-          <Trans>Swap</Trans>
-        </StyledNavLink>
-        <StyledNavLink
-          id={`pool-nav-link`}
-          to={'/pool'}
-          isActive={(match, { pathname }) =>
-            Boolean(match) ||
-            pathname.startsWith('/add') ||
-            pathname.startsWith('/remove') ||
-            pathname.startsWith('/increase') ||
-            pathname.startsWith('/find')
-          }
-        >
-          <Trans>Pool</Trans>
-        </StyledNavLink>
-        {(!chainId || chainId === SupportedChainId.MAINNET) && (
-          <StyledNavLink id={`vote-nav-link`} to={'/vote'}>
-            <Trans>DashBoard</Trans>
-          </StyledNavLink>
-        )}
-        <StyledExternalLink id={`charts-nav-link`} href={mcdegenurl}>
-          <Trans>Website</Trans>
-          <sup>↗</sup>
-        </StyledExternalLink>
-      </HeaderLinks>
+        <HeaderLinks></HeaderLinks>
 
-      <HeaderControls>
-        <HeaderElement>
-          <NetworkSelector />
-        </HeaderElement>
-        <HeaderElement>
-          {availableClaim && !showClaimPopup && (
-            <UNIWrapper onClick={toggleClaimModal}>
-              <UNIAmount active={!!account && !availableClaim} style={{ pointerEvents: 'auto' }}>
-                <ThemedText.White padding="0 2px">
-                  {claimTxn && !claimTxn?.receipt ? (
-                    <Dots>
-                      <Trans>Claiming UNI</Trans>
-                    </Dots>
-                  ) : (
-                    <Trans>Claim UNI</Trans>
-                  )}
-                </ThemedText.White>
-              </UNIAmount>
-              <CardNoise />
-            </UNIWrapper>
-          )}
-          <AccountElement active={!!account}>
-            {account && userEthBalance ? (
-              <BalanceText style={{ flexShrink: 0, userSelect: 'none' }}>
-                <Trans>
-                  {userEthBalance?.toSignificant(3)} {nativeCurrencySymbol}
-                </Trans>
-              </BalanceText>
-            ) : null}
-            <Web3Status />
-          </AccountElement>
-        </HeaderElement>
-        <HeaderElement></HeaderElement>
-      </HeaderControls>
-    </HeaderFrame>
+        <HeaderControls>
+          <HeaderElement>
+            <NetworkSelector />
+          </HeaderElement>
+          <HeaderElement>
+            <AccountElement active={!!account}>
+              {account && userEthBalance ? (
+                <BalanceText style={{ flexShrink: 0, userSelect: 'none' }}>
+                  <Trans>
+                    {userEthBalance?.toSignificant(3)} {nativeCurrencySymbol}
+                  </Trans>
+                </BalanceText>
+              ) : null}
+              <Web3Status />
+            </AccountElement>
+          </HeaderElement>
+          <HeaderElement></HeaderElement>
+        </HeaderControls>
+      </HeaderFrame>
+    </>
   )
 }
