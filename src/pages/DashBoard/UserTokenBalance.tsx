@@ -156,8 +156,8 @@ const UserDashBoard = () => {
               maxHeight: '120px',
               position: 'relative',
               right: 250,
+              bottom: 120,
               height: '120px',
-              top: 100,
             }}
           >
             <Styledtext style={{ justifyContent: 'right', textAlign: 'left', paddingRight: 250 }}>
@@ -177,7 +177,7 @@ const UserDashBoard = () => {
               marginBottom: '10px',
               position: 'relative',
               left: 200,
-              bottom: '30px',
+              bottom: 250,
             }}
           >
             <Styledtext style={{ justifyContent: 'right', textAlign: 'left', paddingRight: 250 }}>

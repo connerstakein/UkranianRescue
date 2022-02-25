@@ -2,23 +2,21 @@ import { SupportedChainId } from 'constants/chains'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import styled from 'styled-components/macro'
 
+import DASH2 from '../../assets/images/DASH2.png'
 import { LightGreyCard } from '../../components/Card'
 //import ClaimTransaction from './ClaimTransaction'
 //import Metrics from './PriceCalls'
 //import Funcalculations from './FunCalculations'
 import UserTokenBalance from './UserTokenBalance'
-
 export default function DashBoardComponent() {
   const { account, chainId } = useActiveWeb3React()
   const showConnectAWallet = Boolean(!account)
   //const propernetwork = Boolean(!chainId)
   const isNotOnMainnet = Boolean(chainId && chainId !== SupportedChainId.BINANCESMARTCHAIN)
 
-  const StyledHeader = styled.text`
-    text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
-    font-size: 35px;
-    text-color: #000000;
-    font-weight: bold;
+  const StyledImg = styled.img`
+    position: relative;
+    bottom: 100px;
   `
 
   const StyledText = styled.text`
@@ -32,7 +30,6 @@ export default function DashBoardComponent() {
           fontSize: '20px',
           fontWeight: 'bold',
           textAlign: 'center',
-          backgroundColor: '#fff700',
           maxWidth: '800px',
         }}
       >
@@ -48,7 +45,6 @@ export default function DashBoardComponent() {
             fontSize: '20px',
             fontWeight: 'bold',
             textAlign: 'center',
-            backgroundColor: '#fff700',
             maxWidth: '800px',
           }}
         >
@@ -59,7 +55,13 @@ export default function DashBoardComponent() {
     } else {
       return (
         <>
-          <StyledHeader> Token Holder DashBoard</StyledHeader>
+          <StyledImg
+            style={{ paddingBottom: 10, alignItems: 'center' }}
+            src={DASH2}
+            height={400}
+            width={800}
+            alt="header"
+          ></StyledImg>
           <UserTokenBalance></UserTokenBalance>
         </>
       )
