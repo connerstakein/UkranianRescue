@@ -162,7 +162,7 @@ const UserDashBoard = () => {
           >
             <Styledtext style={{ justifyContent: 'right', textAlign: 'left', paddingRight: 250 }}>
               {' '}
-              Your Claimable Balance {''} {claimableBalance}
+              Your Claimable Balance {''} ${claimableBalance} {''} BUSD
             </Styledtext>{' '}
             <ClaimButton disabled={!account || loading} onClick={handleClaim}>
               {' '}
