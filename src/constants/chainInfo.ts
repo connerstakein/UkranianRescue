@@ -1,5 +1,6 @@
 import ethereumLogoUrl from 'assets/images/ethereum-logo.png'
 import arbitrumLogoUrl from 'assets/svg/arbitrum_logo.svg'
+import binancelogo from 'assets/svg/binancelogo.svg'
 import optimismLogoUrl from 'assets/svg/optimistic_ethereum.svg'
 import polygonMaticLogo from 'assets/svg/polygon-matic-logo.svg'
 import ms from 'ms.macro'
@@ -83,7 +84,7 @@ export const CHAIN_INFO: ChainInfoMap = {
     explorer: 'https://bscscan.com/',
     infoLink: 'https://info.uniswap.org/#/',
     label: 'BSC',
-    logoUrl: ethereumLogoUrl,
+    logoUrl: binancelogo,
     addNetworkInfo: {
       nativeCurrency: { name: 'BSC', symbol: 'BNB', decimals: 18 },
       rpcUrl: INFURA_NETWORK_URLS[SupportedChainId.BINANCESMARTCHAIN],
